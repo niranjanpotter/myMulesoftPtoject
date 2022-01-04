@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="f8692c50-8789-4845-a2b3-ee39dd4bfac2" >
+		<db:my-sql-connection host="remotemysql.com" port="3306" user="BsWIf1mybF" password="XN4iyiOD1M" database="BsWIf1mybF" />
+	</db:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eba459e4-2c97-4ce5-b10b-d5faa60ead55" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="pocFlow" doc:id="02b8d709-1a97-4812-87c8-b2f776ecd3be" >
+		<http:listener doc:name="Listener" doc:id="3079f499-bba2-440c-975b-9c52a344e44f" config-ref="HTTP_Listener_config" path="/hello"/>
+		<db:select doc:name="Select" doc:id="eade157a-04cd-43d3-b564-e85ae56cc2b7" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from commission where OrderID=:id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	id: attributes.queryParams.ID
+}]]]></db:input-parameters>
+		</db:select>
+	</flow>
+</mule>
